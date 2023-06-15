@@ -1,18 +1,17 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
-import { cartProductHandlerSelector } from '../../states/cartProducts';
 import { toastState } from '../../states/toast';
 import { DELETE_MESSAGE, QUANTITY_MESSAGE } from '../../constants/toast';
 import useUpdateCartItemQuantity from '../queries/useUpdateCartItemQuantity';
+import useDeleteCartItem from '../queries/useDeleteCartItem';
 
 export const useCartProductUpdate = (
   id: number | undefined,
   quantity: number | undefined
 ) => {
-  const { deleteTargetCartProduct } = useRecoilValue(
-    cartProductHandlerSelector
-  );
   const updateCartItemQuantityMutation = useUpdateCartItemQuantity();
+  const deleteCartItemMutation = useDeleteCartItem();
+
   const setToastState = useSetRecoilState(toastState);
 
   const deleteProduct = async () => {
@@ -21,8 +20,7 @@ export const useCartProductUpdate = (
         throw new Error('장바구니에 해당 상품이 없습니다.');
       }
 
-      await deleteTargetCartProduct(id);
-      setToastState(DELETE_MESSAGE.success);
+      deleteCartItemMutation.mutate(id);
     } catch (error) {
       setToastState(DELETE_MESSAGE.error);
     }
