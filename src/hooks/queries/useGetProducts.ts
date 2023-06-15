@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import productApis from '../../apis/products';
 import { serverNameState } from '../../states/serverName';
 
-const useProductQuery = () => {
+const useGetProducts = () => {
   const serverName = useRecoilValue(serverNameState);
 
   const info = useQuery({
@@ -15,4 +15,4 @@ const useProductQuery = () => {
   return info;
 };
 
-export default useProductQuery;
+export default useGetProducts;

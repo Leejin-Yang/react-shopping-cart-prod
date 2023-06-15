@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import ProductItem from './ProductItem';
 import EmptyMessage from '../Common/EmptyMessage';
 
-import useProductQuery from '../../hooks/queries/useProductQuery';
+import useGetProducts from '../../hooks/queries/useGetProducts';
 
 const ProductList = () => {
-  const { data: products } = useProductQuery();
+  const { data: products } = useGetProducts();
 
   if (products?.length === 0) {
     return <EmptyMessage type='product' />;
