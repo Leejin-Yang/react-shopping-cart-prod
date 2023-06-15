@@ -1,21 +1,20 @@
-import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import ProductItem from './ProductItem';
 import EmptyMessage from '../Common/EmptyMessage';
 
-import { productState } from '../../states/products';
+import useProductQuery from '../../hooks/queries/useProductQuery';
 
 const ProductList = () => {
-  const products = useRecoilValue(productState);
+  const { data: products } = useProductQuery();
 
-  if (products.length === 0) {
+  if (products?.length === 0) {
     return <EmptyMessage type='product' />;
   }
 
   return (
     <ProductListContainer>
-      {products.map((product) => (
+      {products?.map((product) => (
         <li key={product.id}>
           <ProductItem product={product} />
         </li>

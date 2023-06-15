@@ -15,6 +15,7 @@ import { worker } from './mocks/browser';
 import GlobalStyle from './styles';
 import theme from './styles/theme';
 import { PATH } from './constants/path';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const main = async () => {
   if (window.location.pathname === '/react-shopping-cart-prod') {
@@ -46,15 +47,25 @@ const router = createBrowserRouter(
   { basename: process.env.PUBLIC_URL }
 );
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+    },
+  },
+});
+
 const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <StrictMode>
-    <RecoilRoot>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </RecoilRoot>
+    <QueryClientProvider client={queryClient}>
+      <RecoilRoot>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </RecoilRoot>
+    </QueryClientProvider>
   </StrictMode>
 );
 

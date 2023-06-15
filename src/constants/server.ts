@@ -1,4 +1,9 @@
 export const SERVER = {
+  황펭: {
+    url: '',
+    id: 'a',
+    password: 'b',
+  },
   푸우: {
     url: process.env.REACT_APP_POOH_URL,
     id: process.env.REACT_APP_ID,
@@ -13,11 +18,6 @@ export const SERVER = {
     url: process.env.REACT_APP_ENCHO_URL,
     id: process.env.REACT_APP_ID,
     password: process.env.REACT_APP_PASSWORD,
-  },
-  황펭: {
-    url: '',
-    id: 'a',
-    password: 'b',
   },
 } as const;
 
