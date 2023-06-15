@@ -1,15 +1,14 @@
-import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import CartProductItem from './CartProductItem';
 import EmptyMessage from '../Common/EmptyMessage';
 
-import { cartProductState } from '../../states/cartProducts';
+import useGetCartItems from '../../hooks/queries/useGetCartItems';
 
 const CartProductList = () => {
-  const cartProducts = useRecoilValue(cartProductState);
+  const { data: cartItems } = useGetCartItems();
 
-  if (cartProducts.length === 0) {
+  if (cartItems?.length === 0) {
     return (
       <MessageWrapper>
         <EmptyMessage type='cart' />
@@ -19,7 +18,7 @@ const CartProductList = () => {
 
   return (
     <CartProductListContainer>
-      {cartProducts.map((cartProduct) => (
+      {cartItems?.map((cartProduct) => (
         <li key={cartProduct.id}>
           <CartProductItem cartProduct={cartProduct} />
         </li>
