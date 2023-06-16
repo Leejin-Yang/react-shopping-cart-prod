@@ -1,21 +1,20 @@
-import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import OrderItem from './OrderItem';
 import EmptyMessage from '../Common/EmptyMessage';
 
-import { orderState } from '../../states/order';
+import useGetOrders from '../../hooks/queries/useGetOrders';
 
 const OrderList = () => {
-  const orders = useRecoilValue(orderState);
+  const { data: orders } = useGetOrders();
 
-  if (orders.length === 0) {
+  if (orders?.length === 0) {
     return <EmptyMessage type='order' />;
   }
 
   return (
     <OrderListContainer>
-      {orders.map((order) => (
+      {orders?.map((order) => (
         <OrderItem key={order.orderId} order={order} />
       ))}
     </OrderListContainer>

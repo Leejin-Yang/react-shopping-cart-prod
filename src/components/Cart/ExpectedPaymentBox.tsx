@@ -5,15 +5,24 @@ import Button from '../Common/Button';
 
 import { useMultipleChecked } from '../../hooks/checked';
 import { useCartPrice } from '../../hooks/cart';
-import { useOrder } from '../../hooks/order';
 import { useCoupons } from '../../hooks/coupon';
+import useAddOrder from '../../hooks/queries/useAddOrder';
 
 const ExpectedPaymentBox = () => {
   const { isAllUnchecked } = useMultipleChecked();
-  const { couponOptions, currentCouponId, changeTargetCoupon } = useCoupons();
-  const { totalProductPrice, deliveryFee, couponPrice, totalPrice } =
-    useCartPrice(currentCouponId);
-  const { orderCartProducts } = useOrder(currentCouponId, totalPrice);
+  const {
+    couponOptions,
+    currentCouponId,
+    currentCouponPrice,
+    changeTargetCoupon,
+  } = useCoupons();
+  const { totalProductPrice, deliveryFee, totalPrice } =
+    useCartPrice(currentCouponPrice);
+  const addOrderMutation = useAddOrder();
+
+  const orderCartItems = () => {
+    addOrderMutation.mutate({ couponId: currentCouponId, totalPrice });
+  };
 
   return (
     <ExpectedPaymentContainer>
@@ -30,13 +39,13 @@ const ExpectedPaymentBox = () => {
         <PaymentInfoItem>
           <dt>총 할인금액</dt>
           <dd>
-            {couponPrice > 0 && '-'}
-            {couponPrice.toLocaleString('ko-KR')}원
+            {currentCouponPrice > 0 && '-'}
+            {currentCouponPrice.toLocaleString('ko-KR')}원
           </dd>
         </PaymentInfoItem>
         <SelectBoxWrapper>
           <SelectBox
-            options={couponOptions}
+            options={couponOptions ?? []}
             title='적용할 쿠폰을 선택해 주세요.'
             onChange={changeTargetCoupon}
             autoSize
@@ -52,7 +61,7 @@ const ExpectedPaymentBox = () => {
           type='button'
           autoSize
           disabled={isAllUnchecked}
-          onClick={orderCartProducts}
+          onClick={orderCartItems}
         >
           주문하기
         </Button>

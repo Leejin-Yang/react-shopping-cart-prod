@@ -2,13 +2,39 @@ import { rest } from 'msw';
 
 import products from '../data/products.json';
 import { CART_STORAGE_ID } from '../../constants/storage';
-import {
-  addTargetProduct,
-  deleteTargetProduct,
-  findTargetProduct,
-  updateTargetQuantity,
-} from '../../states/cartProducts/util';
-import type { CartProduct } from '../../types/product';
+import type { CartProduct, Product } from '../../types/product';
+
+const findTargetProduct = (
+  cartProducts: CartProduct[],
+  productId: number,
+  cartItemId?: number
+) =>
+  cartProducts.find((cartProduct) =>
+    cartItemId
+      ? cartItemId === cartProduct.id
+      : productId === cartProduct.product.id
+  );
+
+const addTargetProduct = (
+  cartProducts: CartProduct[],
+  cartItemId: number,
+  product: Product
+) => [...cartProducts, { id: cartItemId, quantity: 1, product }];
+
+const deleteTargetProduct = (cartProducts: CartProduct[], id: number) =>
+  cartProducts.filter((cartProduct) => cartProduct.id !== id);
+
+const updateTargetQuantity = (
+  cartProducts: CartProduct[],
+  id: number,
+  quantity: number
+) =>
+  cartProducts.map((cartProduct) => {
+    if (cartProduct.id === id) {
+      return { ...cartProduct, quantity };
+    }
+    return cartProduct;
+  });
 
 export const cartProductHandlers = [
   rest.get('/cart-items', (_, res, ctx) => {

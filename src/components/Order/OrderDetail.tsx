@@ -3,16 +3,20 @@ import styled from 'styled-components';
 import OrderItem from './OrderItem';
 import TotalPriceBox from './TotalPriceBox';
 
-import { useOrderDetail } from '../../hooks/order';
+import useGetOrderDetail from '../../hooks/queries/useGetOrderDetail';
 
 const OrderDetail = () => {
-  const { order, totalPrice } = useOrderDetail();
+  const { data: orderDetail } = useGetOrderDetail();
+
+  if (!orderDetail) {
+    return null;
+  }
 
   return (
     <OrderDetailContainer>
-      <OrderItem order={order} />
+      <OrderItem order={orderDetail.order} />
       <TotalPriceContainer>
-        <TotalPriceBox totalPrice={totalPrice} />
+        <TotalPriceBox totalPrice={orderDetail.totalPrice} />
       </TotalPriceContainer>
     </OrderDetailContainer>
   );
