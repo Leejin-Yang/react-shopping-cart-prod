@@ -14,7 +14,7 @@ export const useCartProductUpdate = (
 
   const setToastState = useSetRecoilState(toastState);
 
-  const deleteProduct = async () => {
+  const deleteProduct = () => {
     try {
       if (!id) {
         throw new Error('장바구니에 해당 상품이 없습니다.');

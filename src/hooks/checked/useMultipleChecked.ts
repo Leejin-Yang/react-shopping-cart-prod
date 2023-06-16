@@ -5,24 +5,23 @@ import {
   allCheckedSelector,
   allUncheckedSelector,
   checkedCartProductIdSelector,
-  checkedCartProductState,
-} from '../../states/checkedCartProducts';
-import { cartProductHandlerSelector } from '../../states/cartProducts';
+  checkedCartItemState,
+} from '../../states/checkedCartItems';
 
-import { toastState } from '../../states/toast';
-import { DELETE_MESSAGE } from '../../constants/toast';
+import { useCartProductCount } from '../cart';
+import useDeleteCartItem from '../queries/useDeleteCartItem';
+import useGetCartItems from '../queries/useGetCartItems';
 
 export const useMultipleChecked = () => {
   const checkedCartProductIds = useRecoilValue(checkedCartProductIdSelector);
-  const setCheckedCartProducts = useSetRecoilState(checkedCartProductState);
-  const setToastState = useSetRecoilState(toastState);
-  const resetChecked = useResetRecoilState(checkedCartProductState);
+  const cartItemCount = useCartProductCount();
+  const setCheckedCartItems = useSetRecoilState(checkedCartItemState);
+  const resetChecked = useResetRecoilState(checkedCartItemState);
 
-  const { deleteMultipleCartProducts } = useRecoilValue(
-    cartProductHandlerSelector
-  );
+  const { data: cartItems } = useGetCartItems();
+  const deleteCartItemMutation = useDeleteCartItem();
 
-  const isAllChecked = useRecoilValue(allCheckedSelector);
+  const isAllChecked = useRecoilValue(allCheckedSelector(cartItemCount));
   const isAllUnchecked = useRecoilValue(allUncheckedSelector);
 
   const toggleAllProductChecked: ChangeEventHandler<HTMLInputElement> = (
@@ -30,22 +29,19 @@ export const useMultipleChecked = () => {
   ) => {
     const { checked } = event.currentTarget;
 
-    if (checked) {
+    if (!checked || !cartItems) {
       resetChecked();
       return;
     }
 
-    setCheckedCartProducts([]);
+    setCheckedCartItems(cartItems);
   };
 
   const deleteCheckedProducts = async () => {
-    try {
-      await deleteMultipleCartProducts(checkedCartProductIds);
-      setCheckedCartProducts([]);
-      setToastState(DELETE_MESSAGE.success);
-    } catch {
-      setToastState(DELETE_MESSAGE.error);
-    }
+    await Promise.all(
+      checkedCartProductIds.map((id) => deleteCartItemMutation.mutateAsync(id))
+    );
+    resetChecked();
   };
 
   return {

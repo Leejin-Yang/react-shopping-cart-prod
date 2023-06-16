@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil';
 
 import { useMultipleChecked } from '../checked';
-import { checkedPriceSelector } from '../../states/checkedCartProducts';
+import { checkedPriceSelector } from '../../states/checkedCartItems';
 
 const DELIVERY_FEE = 3_000;
 

@@ -15,13 +15,13 @@ interface CartProductItemProps {
 }
 
 const CartProductItem = ({ cartProduct }: CartProductItemProps) => {
-  const { id, quantity, product } = cartProduct;
-  const { name, price, imageUrl } = product;
-
-  const { addCount, subtractCount, deleteProduct } = useCartProductUpdate(
+  const {
     id,
-    quantity
-  );
+    quantity,
+    product: { name, price, imageUrl },
+  } = cartProduct;
+
+  const { addCount, subtractCount } = useCartProductUpdate(id, quantity);
   const { targetChecked, updateChecked, deleteChecked } =
     useChecked(cartProduct);
 
@@ -29,11 +29,6 @@ const CartProductItem = ({ cartProduct }: CartProductItemProps) => {
     event
   ) => {
     updateChecked(event.currentTarget.checked);
-  };
-
-  const deleteProductAndChecked = async () => {
-    await deleteProduct();
-    deleteChecked();
   };
 
   return (
@@ -46,7 +41,7 @@ const CartProductItem = ({ cartProduct }: CartProductItemProps) => {
       <Image src={imageUrl} alt={name} loading='lazy' variant='small' />
       <ProductName>{name}</ProductName>
       <CartInfoContainer>
-        <DeleteButton type='button' onClick={deleteProductAndChecked}>
+        <DeleteButton type='button' onClick={deleteChecked}>
           <TrashCanIcon />
         </DeleteButton>
         <AmountCounter

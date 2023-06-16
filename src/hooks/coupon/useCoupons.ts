@@ -2,7 +2,7 @@ import { ChangeEventHandler, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import useGetCoupons from '../queries/useGetCoupons';
-import { checkedPriceSelector } from '../../states/checkedCartProducts';
+import { checkedPriceSelector } from '../../states/checkedCartItems';
 
 export const useCoupons = () => {
   const [currentCouponId, setCurrentCouponId] = useState<number>();

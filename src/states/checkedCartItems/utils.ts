@@ -8,8 +8,8 @@ export const getIsAllChecked = (
 export const getIsAllUnchecked = (checked: CartProduct[]) =>
   checked.length === 0;
 
-export const findTargetChecked = (checked: CartProduct[], id: number) =>
-  checked.find((item) => item.id === id);
+export const findTargetChecked = (checked: CartProduct[], targetId: number) =>
+  checked.find((item) => item.id === targetId);
 
 export const addCartProductChecked = (
   cartProducts: CartProduct[],

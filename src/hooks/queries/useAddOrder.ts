@@ -2,12 +2,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import orderApis from '../../apis/order';
-import { checkedCartProductIdSelector } from '../../states/checkedCartProducts';
+
 import { serverNameState } from '../../states/serverName';
 import { toastState } from '../../states/toast';
 import { ORDER_MESSAGE } from '../../constants/toast';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../../constants/path';
+import { checkedCartProductIdSelector } from '../../states/checkedCartItems';
 
 const useAddOrder = () => {
   const cartItemIds = useRecoilValue(checkedCartProductIdSelector);
